@@ -14,6 +14,11 @@ exports.registerpage = async (req, res, next) => {
     root: path.join(__dirname, "../public/views"),
   });
 };
+exports.loginpage = async (req, res, next) => {
+  res.sendFile("login.html", {
+    root: path.join(__dirname, "../public/views"),
+  });
+};
 exports.register = async (req, res, next) => {
   const { name, email, password, phone } = req.body;
   console.log(req.body);
