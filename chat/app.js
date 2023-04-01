@@ -12,11 +12,14 @@ const dotenv = require("dotenv");
 dotenv.config();
 const sequelize = require("./util/database");
 
+app.use(cors({ origin: "http://localhost:3000" }));
+
 app.use(UserRoutes);
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "js")));
 app.use(bodyParser.urlencoded({ extended: false }));
+
 const port = 3000;
 
 sequelize
