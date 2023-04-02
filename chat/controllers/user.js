@@ -39,7 +39,12 @@ exports.register = async (req, res, next) => {
     // res.send(insertResult);
   } catch (error) {
     console.log(error);
-    res.status(500).send("Internal Server error Occured");
+
+    res.json({
+      message: "Internal Server error Occured",
+      data: error,
+      status: 400,
+    });
   }
 };
 

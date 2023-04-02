@@ -102,7 +102,11 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-    <script>
+    <script
+      src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
+      type="text/javascript"
+    ></script>
+  <script>
       const res = document.getElementById("register");
       res.addEventListener("click", function () {
         const email = document.getElementById("email").value;
@@ -125,14 +129,16 @@
               document.getElementById("msg_send").innerHTML = messages;
               jQuery("#msg_send").show(0).delay(5000).hide(0);
             } else {
-              document.getElementById("msg_send").innerHTML = messages;
+              // console.log(response['data']['data']['errors'][0]['message']);
+              document.getElementById("msg_send").innerHTML = response['data']['data']['errors'][0]['message'];
               jQuery("#msg_send").show(0).delay(5000).hide(0);
             }
             // mesage.innerHTML = "Success";
             // console.log(response.data);
           })
           .catch((err) => {
-            document.getElementById("msg_send").innerHTML = err;
+            // console.log(err);
+            document.getElementById("msg_send").innerHTML =err;
             jQuery("#msg_send").show(0).delay(5000).hide(0);
           });
       });
