@@ -6,7 +6,10 @@ const path = require("path");
 function generateAccessToken(id, name) {
   return jwt.sign(
     { userId: id, name: name },
-    "abaabajdbjahdahdad55a35656@###@@@bnakl"
+    "987546585454566985abavchafjagjaaj1",
+    {
+      expiresIn: "11h",
+    }
   );
 }
 exports.registerpage = async (req, res, next) => {

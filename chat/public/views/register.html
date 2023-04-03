@@ -128,6 +128,7 @@
             if (suc == true) {
               document.getElementById("msg_send").innerHTML = messages;
               jQuery("#msg_send").show(0).delay(5000).hide(0);
+              // Simulate a mouse click:
             } else {
               // console.log(response['data']['data']['errors'][0]['message']);
               document.getElementById("msg_send").innerHTML = response['data']['data']['errors'][0]['message'];

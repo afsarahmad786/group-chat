@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const sequelize = new Sequelize("groupchat", "root", "root", {
   dialect: "mysql",
-  host: process.env.DB_HOST,
+  host: "localhost",
 });
 
 module.exports = sequelize;

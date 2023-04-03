@@ -110,9 +110,14 @@
             const messages = response.data["message"];
             const suc = response.data["success"];
             if (suc == true) {
-              document.getElementById("msg_send").innerHTML = messages;
+              localStorage.setItem("token", response.data.token);
 
+              document.getElementById("msg_send").innerHTML = messages;
               jQuery("#msg_send").show(0).delay(5000).hide(0);
+              const myTimeout = setTimeout(myGreeting, 10000);
+              function myGreeting() {
+                location.href = "/chat/send";
+              }
             } else {
               document.getElementById("msg_send").innerHTML = messages;
               jQuery("#msg_send").show(0).delay(5000).hide(0);
