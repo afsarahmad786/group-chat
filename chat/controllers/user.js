@@ -2,6 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const { setCookie } = require("../util/setCookies");
 
 function generateAccessToken(id, name) {
   return jwt.sign(
@@ -70,13 +71,7 @@ exports.login = async (req, res, next) => {
     if (user) {
       const cmp = await bcrypt.compare(password, user.password);
       if (cmp) {
-        res.json({
-          message: "User Logged in Successfully",
-          success: true,
-          status: 200,
-          data: user,
-          token: generateAccessToken(user.id, user.name),
-        });
+        setCookie(res, user, "User Logged in Successfully");
       } else {
         res.json({
           message: "Password is incorrect",

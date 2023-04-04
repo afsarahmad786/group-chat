@@ -9,13 +9,13 @@ const router = express.Router();
 // router.get("/register", usercontroller.registerpage);
 router.post(
   "/chat/send",
-  // userAuthenticate.authenticate,
+  userAuthenticate.authenticate,
   chatcontroller.sendmessage
 );
 
 router.get(
   "/chat/send",
-  // userAuthenticate.authenticate,
+  userAuthenticate.authenticate,
   chatcontroller.chatpage
 );
 

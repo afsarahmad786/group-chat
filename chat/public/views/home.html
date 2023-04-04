@@ -44,7 +44,7 @@
     </div>
     <div class="container bg-info fixed-bottom">
       <div class="card bg-info">
-        <form action="http://localhost:3000/chat/send" method="post">
+        <form method="post">
           <div class="card-body">
             <div class="mb-3">
               <label for="info">Please enter your message</label>
@@ -79,10 +79,9 @@
     ></script>
     <script>
       const res = document.getElementById("msg");
-      res.addEventListener("click", function () {
-        const token = localStorage.getItem("token");
+      res.addEventListener("click", function (e) {
+        e.preventDefault();
 
-        console.log(token);
         const message = document.getElementById("message").value;
         const reciever_id = document.getElementById("reciever_id").value;
 
@@ -94,7 +93,7 @@
               reciever_id: reciever_id,
             },
             {
-              headers: { Authorization: token },
+              withCredentials: true,
             }
           )
           .then((response) => {

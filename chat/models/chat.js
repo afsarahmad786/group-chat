@@ -11,7 +11,7 @@ const Chat = sequelize.define("chat", {
   },
   reciever_id: {
     type: Sequelize.INTEGER,
-    allowNull: true,
+    allowNull: false,
   },
   message: Sequelize.STRING,
   is_read: Sequelize.INTEGER,

@@ -3,14 +3,12 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 
 exports.sendmessage = async (req, res, next) => {
-  console.log("eeeeeeeee", req.user);
-
   const { message, reciever_id } = req.body;
   Chat.create({
     message: message,
     is_read: 0,
     reciever_id: reciever_id,
-    // userId: req.user.id,
+    userId: req.user.id,
   })
     .then((result) => {
       res.json({
