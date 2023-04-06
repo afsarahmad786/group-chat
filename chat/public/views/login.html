@@ -113,8 +113,8 @@
               localStorage.setItem("token", response.data.token);
 
               document.getElementById("msg_send").innerHTML = messages;
-              jQuery("#msg_send").show(0).delay(5000).hide(0);
-              const myTimeout = setTimeout(myGreeting, 10000);
+              jQuery("#msg_send").show(0).delay(3000).hide(0);
+              const myTimeout = setTimeout(myGreeting, 2000);
               function myGreeting() {
                 location.href = "/chat/send";
               }
