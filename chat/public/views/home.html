@@ -80,35 +80,38 @@
     <script>
       let data_new = [];
       document.addEventListener("DOMContentLoaded", () => {
-        setInterval(() => {
-          axios
-            .get(
-              "http://localhost:3000/chat/get",
+        axios
+          .get(
+            "http://localhost:3000/chat/get",
 
-              {
-                withCredentials: true,
-              }
-            )
-            .then((response) => {
-              const messages = response.data["message"];
-              const data = response.data["data"];
-              const suc = response.data["success"];
-              data_new = [...data, ...data_new];
-              // if (suc == true) {
-              //   document.getElementById("msg_send").innerHTML = messages;
+            {
+              withCredentials: true,
+            }
+          )
+          .then((response) => {
+            const messages = response.data["message"];
+            const data = response.data["data"];
+            const suc = response.data["success"];
+            localStorage.setItem("chat", JSON.stringify(data));
+            // if (suc == true) {
+            //   document.getElementById("msg_send").innerHTML = messages;
 
-              //   jQuery("#msg_send").show(0).delay(5000).hide(0);
-              // } else {
-              //   document.getElementById("msg_send").innerHTML = messages;
-              //   jQuery("#msg_send").show(0).delay(5000).hide(0);
-              // }
-              console.log(data_new);
-              data_new.forEach(chatrendering);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }, 1000);
+            //   jQuery("#msg_send").show(0).delay(5000).hide(0);
+            // } else {
+            //   document.getElementById("msg_send").innerHTML = messages;
+            //   jQuery("#msg_send").show(0).delay(5000).hide(0);
+            // }
+
+            setInterval(() => {
+              updateitems(data);
+            }, 1000);
+
+            let chatdata = JSON.parse(localStorage.getItem("chat"));
+            chatdata.forEach(chatrendering);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       });
       const res = document.getElementById("msg");
       res.addEventListener("click", function (e) {
@@ -148,8 +151,36 @@
           });
       });
 
+      function updateitems(data) {
+        let existingchat = JSON.parse(localStorage.getItem("chat"));
+        let id = existingchat[existingchat.length - 1]["id"];
+        axios
+          .get(
+            "http://localhost:3000/chat/getmessage?id=" + id,
+
+            {
+              withCredentials: true,
+            }
+          )
+          .then((response) => {
+            const messages = response.data["message"];
+            const data2 = response.data["data"];
+            if (data2.length === 0) {
+              // existingchat.forEach(chatrendering);
+              // console.log(JSON.parse(localStorage.getItem("chat")));
+            } else {
+              data_new = [...data_new, ...data2];
+              localStorage.setItem("chat", JSON.stringify(data_new));
+              // console.log(JSON.parse(localStorage.getItem("chat")));
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
       function chatrendering(item) {
-        console.log(item);
+        // console.log(item);
         const chat_container = document.getElementById("chat-container");
         const para = document.createElement("p");
         if (item.userId == item.user.id) {

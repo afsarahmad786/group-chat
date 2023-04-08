@@ -2,6 +2,7 @@ const Chat = require("../models/chat");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const { Op } = require("sequelize");
 
 exports.sendmessage = async (req, res, next) => {
   const { message, reciever_id } = req.body;
@@ -29,21 +30,54 @@ exports.chatpage = async (req, res, next) => {
   });
 };
 
-exports.getchat =async (req, res, next) => {
+exports.getchat = async (req, res, next) => {
   Chat.findAll({
     where: {
-      userId: req.user.id
-    }, where: {
-      reciever_id: 5
+      userId: req.user.id,
+    },
+    where: {
+      reciever_id: 5,
     },
     include: [
       {
-        attributes: ['id','name','email','phone'],
+        attributes: ["id", "name", "email", "phone"],
         model: User,
       },
     ],
+  })
+    .then((result) => {
+      console.log(result);
+      res.json({
+        message: "Message Fetched Successfully",
+        success: true,
+        data: result,
+      });
+    })
+    .catch((err) => console.log(err));
+};
 
-   
+exports.getnewchat = async (req, res, next) => {
+  const lastid = req.query.id;
+  console.log("reqqqqqqqqqqqqqqqq", lastid);
+  Chat.findAll({
+    where: {
+      [Op.and]: [
+        { userId: req.user.id },
+        { reciever_id: 5 },
+        {
+          id: {
+            [Op.gt]: lastid,
+          },
+        },
+      ],
+    },
+
+    include: [
+      {
+        attributes: ["id", "name", "email", "phone"],
+        model: User,
+      },
+    ],
   })
     .then((result) => {
       console.log(result);

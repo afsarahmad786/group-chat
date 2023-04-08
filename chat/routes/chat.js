@@ -18,10 +18,11 @@ router.get(
   userAuthenticate.authenticate,
   chatcontroller.chatpage
 );
+router.get("/chat/get", userAuthenticate.authenticate, chatcontroller.getchat);
 router.get(
-  "/chat/get",
+  "/chat/getmessage",
   userAuthenticate.authenticate,
-  chatcontroller.getchat
+  chatcontroller.getnewchat
 );
 
 module.exports = router;

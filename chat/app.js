@@ -18,10 +18,10 @@ app.use(cors());
 
 app.use(UserRoutes);
 app.use(ChatRoutes);
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "js")));
-app.use(bodyParser.urlencoded({ extended: false }));
 
 User.hasMany(Chat);
 Chat.belongsTo(User);
