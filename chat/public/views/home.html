@@ -78,33 +78,37 @@
       crossorigin="anonymous"
     ></script>
     <script>
+      let data_new = [];
       document.addEventListener("DOMContentLoaded", () => {
-        axios
-          .get(
-            "http://localhost:3000/chat/get",
+        setInterval(() => {
+          axios
+            .get(
+              "http://localhost:3000/chat/get",
 
-            {
-              withCredentials: true,
-            }
-          )
-          .then((response) => {
-            const messages = response.data["message"];
-            const data = response.data["data"];
-            const suc = response.data["success"];
+              {
+                withCredentials: true,
+              }
+            )
+            .then((response) => {
+              const messages = response.data["message"];
+              const data = response.data["data"];
+              const suc = response.data["success"];
+              data_new = [...data, ...data_new];
+              // if (suc == true) {
+              //   document.getElementById("msg_send").innerHTML = messages;
 
-            if (suc == true) {
-              document.getElementById("msg_send").innerHTML = messages;
-
-              jQuery("#msg_send").show(0).delay(5000).hide(0);
-            } else {
-              document.getElementById("msg_send").innerHTML = messages;
-              jQuery("#msg_send").show(0).delay(5000).hide(0);
-            }
-            data.forEach(chatrendering);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+              //   jQuery("#msg_send").show(0).delay(5000).hide(0);
+              // } else {
+              //   document.getElementById("msg_send").innerHTML = messages;
+              //   jQuery("#msg_send").show(0).delay(5000).hide(0);
+              // }
+              console.log(data_new);
+              data_new.forEach(chatrendering);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }, 1000);
       });
       const res = document.getElementById("msg");
       res.addEventListener("click", function (e) {
