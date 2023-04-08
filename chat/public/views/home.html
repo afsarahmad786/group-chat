@@ -79,35 +79,32 @@
     ></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        
         axios
-        .get(
-          "http://localhost:3000/chat/get",
-         
-          {
-            withCredentials: true,
-          }
-        )
-        .then((response) => {
-          const messages = response.data["message"];
-          const data = response.data['data'];
-          const suc = response.data["success"];
+          .get(
+            "http://localhost:3000/chat/get",
 
-          if (suc == true) {
-            document.getElementById("msg_send").innerHTML = messages;
-
-            jQuery("#msg_send").show(0).delay(5000).hide(0);
-          } else {
-            document.getElementById("msg_send").innerHTML = messages;
-            jQuery("#msg_send").show(0).delay(5000).hide(0);
-          }
-          data.forEach(
-            chatrendering
+            {
+              withCredentials: true,
+            }
           )
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+          .then((response) => {
+            const messages = response.data["message"];
+            const data = response.data["data"];
+            const suc = response.data["success"];
+
+            if (suc == true) {
+              document.getElementById("msg_send").innerHTML = messages;
+
+              jQuery("#msg_send").show(0).delay(5000).hide(0);
+            } else {
+              document.getElementById("msg_send").innerHTML = messages;
+              jQuery("#msg_send").show(0).delay(5000).hide(0);
+            }
+            data.forEach(chatrendering);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       });
       const res = document.getElementById("msg");
       res.addEventListener("click", function (e) {
@@ -133,7 +130,10 @@
             if (suc == true) {
               document.getElementById("msg_send").innerHTML = messages;
 
-              jQuery("#msg_send").show(0).delay(5000).hide(0);
+              jQuery("#msg_send").show(0).delay(1000).hide(0);
+              setTimeout(() => {
+                location.reload();
+              }, 1000);
             } else {
               document.getElementById("msg_send").innerHTML = messages;
               jQuery("#msg_send").show(0).delay(5000).hide(0);
@@ -143,21 +143,20 @@
             console.log(err);
           });
       });
-    
-    function chatrendering(item){
-      console.log(item);
-      const chat_container=document.getElementById('chat-container');
-      const para=document.createElement('p')
-      if(item.userId==item.user.id){
-        para.className = "card-text text-custom pt2 pb-2 ps-1";
-      }else{
-        para.className = "card-text pt2 pb-2 ps-1";
+
+      function chatrendering(item) {
+        console.log(item);
+        const chat_container = document.getElementById("chat-container");
+        const para = document.createElement("p");
+        if (item.userId == item.user.id) {
+          para.className = "card-text text-custom pt2 pb-2 ps-1";
+        } else {
+          para.className = "card-text pt2 pb-2 ps-1";
+        }
+        para.innerText = item.message;
+
+        chat_container.append(para);
       }
-      para.innerText = item.message;
-
-      chat_container.append(para)
-    }
-
     </script>
 
     <script
