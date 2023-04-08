@@ -33,15 +33,22 @@ exports.chatpage = async (req, res, next) => {
 exports.getchat = async (req, res, next) => {
   Chat.findAll({
     where: {
-      userId: req.user.id,
+      [Op.or]: [{ userId: req.user.id }, { userId: 2 }],
+      [Op.or]: [{ reciever_id: 2 }, { reciever_id: req.user.id }],
     },
-    where: {
-      reciever_id: 5,
-    },
+    // where: {
+    //   [Op.and]: [{ userId: 2 }, { reciever_id: req.user.id }],
+    //   // [Op.and]: [{ userId: req.user.id }, { reciever_id: 2 }],
+    // },
     include: [
       {
         attributes: ["id", "name", "email", "phone"],
         model: User,
+      },
+      {
+        attributes: ["id", "name", "email", "phone"],
+        model: User,
+        as: "sender",
       },
     ],
   })
@@ -63,7 +70,7 @@ exports.getnewchat = async (req, res, next) => {
     where: {
       [Op.and]: [
         { userId: req.user.id },
-        { reciever_id: 5 },
+        { reciever_id: 2 },
         {
           id: {
             [Op.gt]: lastid,

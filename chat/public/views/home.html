@@ -53,7 +53,7 @@
                 type="hidden"
                 name="reciever_id"
                 id="reciever_id"
-                value="5"
+                value="1"
               />
             </div>
             <button type="submit" class="btn btn-dark" id="msg">Submit</button>
@@ -107,6 +107,7 @@
             }, 1000);
 
             let chatdata = JSON.parse(localStorage.getItem("chat"));
+            console.log("ccccccccccccccccccc", chatdata);
             chatdata.forEach(chatrendering);
           })
           .catch((err) => {
@@ -153,37 +154,41 @@
 
       function updateitems(data) {
         let existingchat = JSON.parse(localStorage.getItem("chat"));
-        let id = existingchat[existingchat.length - 1]["id"];
-        axios
-          .get(
-            "http://localhost:3000/chat/getmessage?id=" + id,
+        if (existingchat && existingchat.length) {
+          let id = existingchat[existingchat.length - 1]["id"];
 
-            {
-              withCredentials: true,
-            }
-          )
-          .then((response) => {
-            const messages = response.data["message"];
-            const data2 = response.data["data"];
-            if (data2.length === 0) {
-              // existingchat.forEach(chatrendering);
-              // console.log(JSON.parse(localStorage.getItem("chat")));
-            } else {
-              data_new = [...data_new, ...data2];
-              localStorage.setItem("chat", JSON.stringify(data_new));
-              // console.log(JSON.parse(localStorage.getItem("chat")));
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+          axios
+            .get(
+              "http://localhost:3000/chat/getmessage?id=" + id,
+
+              {
+                withCredentials: true,
+              }
+            )
+            .then((response) => {
+              const messages = response.data["message"];
+              const data2 = response.data["data"];
+              if (data2.length === 0) {
+                // existingchat.forEach(chatrendering);
+                // console.log(JSON.parse(localStorage.getItem("chat")));
+              } else {
+                data_new = [...data_new, ...data2];
+                localStorage.setItem("chat", JSON.stringify(data_new));
+                // console.log(JSON.parse(localStorage.getItem("chat")));
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       }
 
       function chatrendering(item) {
         // console.log(item);
         const chat_container = document.getElementById("chat-container");
         const para = document.createElement("p");
-        if (item.userId == item.user.id) {
+        console.log("testtttttttttttttt", item.userId, item.sender.id);
+        if (item.userId == item.sender.id) {
           para.className = "card-text text-custom pt2 pb-2 ps-1";
         } else {
           para.className = "card-text pt2 pb-2 ps-1";
