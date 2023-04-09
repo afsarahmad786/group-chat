@@ -9,7 +9,6 @@ exports.sendmessage = async (req, res, next) => {
   Chat.create({
     message: message,
     is_read: 0,
-    reciever_id: reciever_id,
     userId: req.user.id,
   })
     .then((result) => {
@@ -33,8 +32,8 @@ exports.chatpage = async (req, res, next) => {
 exports.getchat = async (req, res, next) => {
   Chat.findAll({
     where: {
-      [Op.or]: [{ userId: req.user.id }, { userId: 2 }],
-      [Op.or]: [{ reciever_id: 2 }, { reciever_id: req.user.id }],
+      userId: req.user.id,
+      // [Op.or]: [{ reciever_id: 2 }, { reciever_id: req.user.id }],
     },
     // where: {
     //   [Op.and]: [{ userId: 2 }, { reciever_id: req.user.id }],
@@ -44,11 +43,6 @@ exports.getchat = async (req, res, next) => {
       {
         attributes: ["id", "name", "email", "phone"],
         model: User,
-      },
-      {
-        attributes: ["id", "name", "email", "phone"],
-        model: User,
-        as: "sender",
       },
     ],
   })
@@ -70,7 +64,7 @@ exports.getnewchat = async (req, res, next) => {
     where: {
       [Op.and]: [
         { userId: req.user.id },
-        { reciever_id: 2 },
+
         {
           id: {
             [Op.gt]: lastid,
@@ -96,3 +90,5 @@ exports.getnewchat = async (req, res, next) => {
     })
     .catch((err) => console.log(err));
 };
+
+exports.creategroup = async (req, res, next) => {};

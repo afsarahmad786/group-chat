@@ -10,6 +10,8 @@ const UserRoutes = require("./routes/user");
 const ChatRoutes = require("./routes/chat");
 var cors = require("cors");
 const path = require("path");
+const Group = require("./models/group");
+const Participant = require("./models/participants");
 const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -24,9 +26,15 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "js")));
 
 User.hasMany(Chat);
-Chat.belongsTo(User, { foreignKey: "reciever_id", as: "sender" });
+// Chat.belongsTo(User, { foreignKey: "reciever_id", as: "sender" });
 // Chat.belongsTo(User, { foreignKey: "UserId", as: "User" });
 Chat.belongsTo(User);
+// User.hasMany(Group);
+Group.hasMany(Chat);
+Group.belongsTo(User);
+
+Participant.hasMany(Group);
+Group.belongsTo(User);
 
 const port = 3000;
 User.hasMany;

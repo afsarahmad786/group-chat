@@ -29,8 +29,65 @@
       id="msg_send"
       style="display: none"
     ></div>
-    <div class="container">
-      <div class="card">
+    <!-- Button trigger modal -->
+    <button
+      type="button"
+      class="btn btn-dark float-end mt-1 me-1"
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModal"
+    >
+      Create Group
+    </button>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Create Group</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="user-selection">
+              <div class="mb-3">
+                <label for="info">Group Name</label>
+                <input type="text" class="form-control" id="name" />
+              </div>
+              <div class="mb-3">
+                <label for="info">Group Name</label>
+                <input type="text" class="form-control" id="name" />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-dark" id="group-btn">
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <div class="card w-50">
         <div class="card-body" id="chat-container">
           <h5 class="card-title text-center">Chat App</h5>
           <!-- <p class="card-text text-custom pt2 pb-2 ps-1">Hello User 1</p>
@@ -49,12 +106,6 @@
             <div class="mb-3">
               <label for="info">Please enter your message</label>
               <input type="text" class="form-control" id="message" />
-              <input
-                type="hidden"
-                name="reciever_id"
-                id="reciever_id"
-                value="1"
-              />
             </div>
             <button type="submit" class="btn btn-dark" id="msg">Submit</button>
           </div>
@@ -102,9 +153,9 @@
             //   jQuery("#msg_send").show(0).delay(5000).hide(0);
             // }
 
-            setInterval(() => {
-              updateitems(data);
-            }, 1000);
+            // setInterval(() => {
+            updateitems(data);
+            // }, 1000);
 
             let chatdata = JSON.parse(localStorage.getItem("chat"));
             console.log("ccccccccccccccccccc", chatdata);
@@ -119,14 +170,14 @@
         e.preventDefault();
 
         const message = document.getElementById("message").value;
-        const reciever_id = document.getElementById("reciever_id").value;
+        // const reciever_id = document.getElementById("reciever_id").value;
 
         axios
           .post(
             "http://localhost:3000/chat/send",
             {
               message: message,
-              reciever_id: reciever_id,
+              // reciever_id: reciever_id,
             },
             {
               withCredentials: true,
@@ -187,14 +238,8 @@
         // console.log(item);
         const chat_container = document.getElementById("chat-container");
         const para = document.createElement("p");
-        console.log("testtttttttttttttt", item.userId, item.sender.id);
-        if (item.userId == item.sender.id) {
-          para.className = "card-text text-custom pt2 pb-2 ps-1";
-        } else {
-          para.className = "card-text pt2 pb-2 ps-1";
-        }
+        para.className = "card-text text-custom pt2 pb-2 ps-1";
         para.innerText = item.message;
-
         chat_container.append(para);
       }
     </script>
