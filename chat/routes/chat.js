@@ -25,10 +25,26 @@ router.get(
   chatcontroller.getnewchat
 );
 
+router.post(
+  "/create-group",
+  userAuthenticate.authenticate,
+  chatcontroller.creategroup
+);
+
 router.get(
   "/group/create",
   userAuthenticate.authenticate,
   chatcontroller.creategroup
+);
+
+router.get("/groups", userAuthenticate.authenticate, chatcontroller.getgroup);
+
+router.get("/group", userAuthenticate.authenticate, chatcontroller.grouppage);
+
+router.get(
+  "/groupchat",
+  userAuthenticate.authenticate,
+  chatcontroller.getgroupchat
 );
 
 module.exports = router;

@@ -26,15 +26,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "js")));
 
 User.hasMany(Chat);
-// Chat.belongsTo(User, { foreignKey: "reciever_id", as: "sender" });
-// Chat.belongsTo(User, { foreignKey: "UserId", as: "User" });
 Chat.belongsTo(User);
-// User.hasMany(Group);
 Group.hasMany(Chat);
 Group.belongsTo(User);
-
-Participant.hasMany(Group);
-Group.belongsTo(User);
+Participant.belongsTo(Group);
 
 const port = 3000;
 User.hasMany;

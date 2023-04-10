@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const { setCookie } = require("../util/setCookies");
+const { Op } = require("sequelize");
 
 function generateAccessToken(id, name) {
   return jwt.sign(
@@ -92,4 +93,40 @@ exports.login = async (req, res, next) => {
     console.log(error);
     res.status(500).send("Internal Server error Occured in Login");
   }
+};
+
+exports.getuser = async (req, res, next) => {
+  User.findAll({
+    where: {
+      id: {
+        [Op.ne]: req.user.id,
+      },
+    },
+
+    attributes: ["id", "name", "phone", "email"],
+  })
+    .then((result) => {
+      console.log(result);
+      res.json({
+        message: "User Fetched Successfully",
+        success: true,
+        data: result,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+exports.getcurrent = async (req, res, next) => {
+  console.log("current", req.user.id);
+  User.findByPk(req.user.id, {
+    attributes: ["id", "name", "phone", "email"],
+  })
+    .then((result) => {
+      console.log(result);
+      res.json({
+        message: "Current User ",
+        success: true,
+        data: result,
+      });
+    })
+    .catch((err) => console.log(err));
 };
