@@ -13,6 +13,11 @@ const Participant = sequelize.define("participant", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  is_admin: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+    default: false,
+  },
   groupId: {
     type: Sequelize.INTEGER,
     allowNull: false,

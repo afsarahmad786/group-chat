@@ -46,5 +46,26 @@ router.get(
   userAuthenticate.authenticate,
   chatcontroller.getgroupchat
 );
+router.get(
+  "/participents",
+  userAuthenticate.authenticate,
+  chatcontroller.getparticipent
+);
+router.get(
+  "/makeadmin",
+  userAuthenticate.authenticate,
+  chatcontroller.makeadmin
+);
+router.get(
+  "/removeuser",
+  userAuthenticate.authenticate,
+  chatcontroller.removeuser
+);
 
+router.get("/adduser", userAuthenticate.authenticate, chatcontroller.adduser);
+router.post(
+  "/adduser",
+  userAuthenticate.authenticate,
+  chatcontroller.addparticipent
+);
 module.exports = router;

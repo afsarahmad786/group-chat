@@ -29,7 +29,10 @@ User.hasMany(Chat);
 Chat.belongsTo(User);
 Group.hasMany(Chat);
 Group.belongsTo(User);
+
 Participant.belongsTo(Group);
+Participant.belongsTo(User);
+// Participant.belongsTo(User, { foreignKey: "UserId", as: "UserData" });
 
 const port = 3000;
 User.hasMany;
@@ -37,9 +40,7 @@ sequelize
   // .sync({ force: true })
   .sync()
   .then((result) => {
-    // console.log(result);
-
-    app.listen(process.env.PORT || 3000, () => {
+    app.listen(process.env.PORT || port, () => {
       console.log(`Server running at http://${port} \n`);
     });
   })

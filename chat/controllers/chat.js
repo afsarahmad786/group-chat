@@ -42,12 +42,6 @@ exports.getchat = async (req, res, next) => {
     //   [Op.and]: [{ userId: 2 }, { reciever_id: req.user.id }],
     //   // [Op.and]: [{ userId: req.user.id }, { reciever_id: 2 }],
     // },
-    include: [
-      {
-        attributes: ["id", "name", "email", "phone"],
-        model: User,
-      },
-    ],
   })
     .then((result) => {
       console.log(result);
@@ -62,7 +56,6 @@ exports.getchat = async (req, res, next) => {
 
 exports.getnewchat = async (req, res, next) => {
   const lastid = req.query.id;
-  console.log("reqqqqqqqqqqqqqqqq", lastid);
   Chat.findAll({
     where: {
       [Op.and]: [
@@ -104,30 +97,31 @@ exports.creategroup = async (req, res, next) => {
       return result;
     })
     .catch((err) => {
-      res.json(err);
+      console.log(err);
     });
-
   for (const id of ids) {
     Participent.create({
       groupId: group["id"],
       userId: id,
+      is_admin: false,
     })
       .then((result) => {
         //  return result;
       })
       .catch((err) => {
-        res.json(err);
+        console.log(err);
       });
   }
   Participent.create({
     groupId: group["id"],
     userId: req.user.id,
+    is_admin: true,
   })
     .then((result) => {
       //  return result;
     })
     .catch((err) => {
-      res.json(err);
+      console.log("participaent", err);
     });
   res.json({
     message: "Group Created Successfully",
@@ -149,8 +143,6 @@ exports.getgroup = async (req, res, next) => {
     ],
   })
     .then((result) => {
-      console.log("testtttttttttttttttttttttt", result);
-
       // return result
       res.json({
         message: "Group Fetched Successfully",
@@ -212,4 +204,148 @@ exports.getgroupchat = async (req, res, next) => {
       });
     })
     .catch((err) => console.log(err));
+};
+
+exports.getparticipent = async (req, res, next) => {
+  const filter = req.query.filter;
+  const groupid = req.query.groupid;
+
+  Participent.findAll({
+    where: {
+      [Op.and]: [{ groupId: groupid }],
+    },
+    include: [
+      {
+        attributes: ["id", "name", "email", "phone"],
+        model: User,
+        where: {
+          [Op.or]: [
+            {
+              name: {
+                [Op.like]: filter + "%",
+              },
+            },
+            {
+              email: {
+                [Op.like]: filter + "%",
+              },
+            },
+            {
+              phone: {
+                [Op.like]: filter + "%",
+              },
+            },
+          ],
+        },
+      },
+    ],
+  })
+    .then((result) => {
+      res.json({
+        message: "Participent Fetched Successfully",
+        success: true,
+        data: result,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+exports.makeadmin = async (req, res, next) => {
+  const id = req.query.id;
+  const groupId = req.query.groupId;
+  Participent.update(
+    { is_admin: true },
+    {
+      where: {
+        userId: id,
+        groupId: groupId,
+      },
+    }
+  )
+    .then((result) => {
+      res.redirect("back");
+      res.json({
+        message: "Participent added to admin Successfully",
+        success: true,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+exports.removeuser = async (req, res, next) => {
+  const id = req.query.id;
+  const groupId = req.query.groupId;
+  Participent.destroy({
+    where: {
+      userId: id,
+      groupId: groupId,
+    },
+  })
+    .then((result) => {
+      // res.redirect('back');
+    })
+    .catch((err) => console.log(err));
+
+  Chat.destroy({
+    where: {
+      userId: id,
+      groupId: groupId,
+    },
+  })
+    .then((result) => {
+      res.redirect("back");
+    })
+    .catch((err) => console.log(err));
+};
+exports.adduser = async (req, res, next) => {
+  const groupId = req.query.groupid;
+  const allparticipent = await Participent.findAll({
+    attributes: ["userId"],
+    raw: true,
+
+    where: {
+      [Op.and]: [{ groupId: groupId }],
+    },
+  })
+    .then((results) => results.map((result) => result.userId))
+    .catch((err) => console.log(err));
+  console.log("aaaaaaaaaaaaaaaaaaa", allparticipent);
+  User.findAll({
+    attributes: ["id", "name"],
+
+    where: {
+      id: {
+        [Op.ne]: allparticipent,
+      },
+    },
+  })
+    .then((result) => {
+      res.json({
+        message: "Participent Listing",
+        success: true,
+        data: result,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.addparticipent = async (req, res, next) => {
+  const { ids } = req.body;
+  console.log("idssssssssssssssss", ids);
+  const groupId = req.query.groupid;
+
+  for (const id of ids) {
+    Participent.create({
+      groupId: groupId,
+      userId: id,
+      is_admin: false,
+    })
+      .then((result) => {
+        res.json({
+          message: "Participent added",
+          success: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 };

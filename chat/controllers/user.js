@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const { setCookie } = require("../util/setCookies");
-const { Op } = require("sequelize");
+const { Op, Model } = require("sequelize");
+const Participant = require("../models/participants");
 
 function generateAccessToken(id, name) {
   return jwt.sign(
