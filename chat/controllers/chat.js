@@ -307,17 +307,15 @@ exports.adduser = async (req, res, next) => {
   })
     .then((results) => results.map((result) => result.userId))
     .catch((err) => console.log(err));
-  console.log("aaaaaaaaaaaaaaaaaaa", allparticipent);
   User.findAll({
     attributes: ["id", "name"],
 
     where: {
-      id: {
-        [Op.ne]: allparticipent,
-      },
+      id: { [Op.notIn]: allparticipent },
     },
   })
     .then((result) => {
+      console.log("participent resit", result);
       res.json({
         message: "Participent Listing",
         success: true,

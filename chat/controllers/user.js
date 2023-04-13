@@ -120,6 +120,11 @@ exports.getcurrent = async (req, res, next) => {
   console.log("current", req.user.id);
   User.findByPk(req.user.id, {
     attributes: ["id", "name", "phone", "email"],
+    include: [
+      {
+        model: Participant,
+      },
+    ],
   })
     .then((result) => {
       console.log(result);

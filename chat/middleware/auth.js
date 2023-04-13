@@ -5,7 +5,6 @@ exports.authenticate = (req, res, next) => {
     const token = req.cookies.token;
     //  req.headers["authorization"];
     const user = jwt.verify(token, "987546585454566985abavchafjagjaaj1");
-    console.log("reqsssssssssssssssssss", user);
     User.findByPk(user.userId)
       .then((user) => {
         req.user = user;

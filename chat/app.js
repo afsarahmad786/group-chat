@@ -26,6 +26,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "js")));
 
 User.hasMany(Chat);
+User.hasOne(Participant);
+
 Chat.belongsTo(User);
 Group.hasMany(Chat);
 Group.belongsTo(User);

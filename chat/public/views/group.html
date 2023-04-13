@@ -187,6 +187,7 @@
                   data-bs-toggle="modal"
                   data-bs-target="#staticBackdrop"
                   id="add-user-to-modal"
+                  style="display: none"
                 >
                   Add User
                 </button>
@@ -409,11 +410,18 @@
           .catch((err) => {
             console.log(err);
           });
+
+        const current = JSON.parse(localStorage.getItem("currentuser"));
+        if (current["participant"]["is_admin"]) {
+          document.getElementById("add-user-to-modal").style.display = "block";
+        }
       });
 
       const add_user = document.getElementById("add-user-to-modal");
       add_user.addEventListener("click", function (e) {
         e.preventDefault();
+        const add_user = document.getElementById("add-user");
+        document.getElementById("add-user").innerHTML = "";
         axios
           .get(
             "http://localhost:3000/adduser?groupid=" +
@@ -435,7 +443,6 @@
       });
       function setadduser(item) {
         const currentuser = JSON.parse(localStorage.getItem("currentuser"));
-
         const add_user = document.getElementById("add-user");
         const optons = document.createElement("option");
         optons.value = item.id;
@@ -545,7 +552,7 @@
       });
 
       function setparticipents(item) {
-        console.log("item", item);
+        console.log("itemssssssssssssssssssssssssssss", item);
         const currentuser = JSON.parse(localStorage.getItem("currentuser"));
         const user_container = document.getElementById("user-data");
 
@@ -568,32 +575,31 @@
           const itag = document.createElement("i");
           itag.className = "fas fa-user-crown";
           anchor.append(itag);
-        } else {
-          if (currentuser.id === item.userId && item.is_admin === false) {
-            const anchor = document.createElement("a");
-            anchor.href =
-              "http://localhost:3000/makeadmin?id=" +
-              item.userId +
-              "&groupId=" +
-              item.groupId;
-            anchor.innerText = "Make Admin";
-            anchor.className = "ms-5 text-white btn-sm btn-dark";
-            div.append(anchor);
+        }
+        if (currentuser["participant"]["is_admin"]) {
+          const anchor = document.createElement("a");
+          anchor.href =
+            "http://localhost:3000/makeadmin?id=" +
+            item.userId +
+            "&groupId=" +
+            item.groupId;
+          anchor.innerText = "Make Admin";
+          anchor.className = "ms-5 text-white btn-sm btn-dark";
+          div.append(anchor);
 
-            const anchor2 = document.createElement("a");
-            anchor2.href =
-              "http://localhost:3000/removeuser?id=" +
-              item.userId +
-              "&groupId=" +
-              item.groupId;
-            // anchor2.innerText = "X";
-            anchor2.className = "ms-5  btn-sm";
-            div.append(anchor2);
+          const anchor2 = document.createElement("a");
+          anchor2.href =
+            "http://localhost:3000/removeuser?id=" +
+            item.userId +
+            "&groupId=" +
+            item.groupId;
+          // anchor2.innerText = "X";
+          anchor2.className = "ms-5  btn-sm";
+          div.append(anchor2);
 
-            const itag = document.createElement("i");
-            itag.className = "fas fa-times text-danger";
-            anchor2.append(itag);
-          }
+          const itag = document.createElement("i");
+          itag.className = "fas fa-times text-danger";
+          anchor2.append(itag);
         }
       }
 
